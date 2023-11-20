@@ -23,17 +23,21 @@ export class AuthService {
     }
 
     async login(loginDTO: LoginDto): Promise<UserResponseDto> {
-        this.getCache();
+        // this.getCache();
 
         const userEntity: Partial<IUserEntity> = {
             email: loginDTO.email,
             passwordHash: loginDTO.password
         };
+        console.log('vive aca')
         const user: User = await this.userRepository.findByEmail(userEntity.email);
+
         if (!user) {
             logger.error(`El usuario con el email: ${userEntity.email} no existe`);
             throw Error('El email o el password son incorrectos');
         }
+
+        
 
         this.cacheService.set(`USER:${user.id}`, JSON.stringify(user));
         // TODO: llevarlo al utils 
@@ -46,7 +50,7 @@ export class AuthService {
 
         const token = this.encrypt.encrypt({ userId: user.id });
         user.token = token;
-        user.lastLogin = new Date();
+        // user.lastLogin = new Date();
 
         const userUpdated = await this.userRepository.updateUser(user.id, user);
 
@@ -54,8 +58,8 @@ export class AuthService {
             id: userUpdated.id,
             username: userUpdated.username,
             email: userUpdated.email,
-            lastLogin: userUpdated.lastLogin,
-            roleId: userUpdated.role.id,
+            // lastLogin: userUpdated.lastLogin,
+            // roleId: userUpdated.role.id,
             token: user.token
         };
     }

@@ -15,11 +15,12 @@ export class AuthController {
     public async login(req: Request, res: Response): Promise<Response> {
         try {
             const loginDTO: LoginDto = req.body;
+            console.log('aaaaa')
             const loginResponse = await this.authService.login(loginDTO);
             return res.status(200).json(loginResponse);
         } catch (error) {
             console.log(error);
-            return res.status(400).json({ message: error });
+            return res.status(400).json({ message: error.message });
         }
     }
 

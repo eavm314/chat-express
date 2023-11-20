@@ -2,6 +2,8 @@ import "reflect-metadata";
 import { db } from "./config";
 import { DataSource } from "typeorm";
 import { UserEntity } from "../entities/UserEntity";
+import { MessageEntity } from "../entities/MessageEntity";
+import { ChatEntity } from "../entities/ChatEntity";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -12,7 +14,7 @@ export const AppDataSource = new DataSource({
     database: db.name,
     synchronize: true,
     logging: false,
-    entities: [UserEntity],
+    entities: [UserEntity, MessageEntity, ChatEntity],
     subscribers: [],
     migrations: [],
 });

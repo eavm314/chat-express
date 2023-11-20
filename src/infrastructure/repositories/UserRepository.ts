@@ -14,7 +14,7 @@ export class UserRepository implements IUserRepository {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const user = await userRepository.findOne({
             where: { id },
-            relations: ['role']
+            // relations: ['role']
         });
         return user ? new User(user) : null;
     }
@@ -22,8 +22,7 @@ export class UserRepository implements IUserRepository {
     async findByEmail(email: string): Promise<User | null> {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const user = await userRepository.findOne({
-            where: { email },
-            relations: ['role']
+            where: { email }
         });
         return user ? new User(user) : null;
     }
