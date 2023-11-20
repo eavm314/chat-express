@@ -21,5 +21,5 @@ export class UserEntity implements IUserEntity {
 
     @ManyToMany(() => ChatEntity)
     @JoinTable() // Esto crea una tabla de unión para la relación many-to-many
-    chats!: ChatEntity[];
+    chats: ChatEntity[];
 }

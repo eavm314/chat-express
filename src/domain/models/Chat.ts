@@ -5,7 +5,7 @@ import { IUserEntity } from '../entities/IUserEntity';
 export class Chat {
     id: string;
     users: IUserEntity[];
-    messages: IMessageEntity[];
+    messages?: IMessageEntity[];
 
     constructor(chatEntity: IChatEntity) {
         this.id = chatEntity.id;

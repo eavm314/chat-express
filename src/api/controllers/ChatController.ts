@@ -15,6 +15,7 @@ export class ChatController {
     public async createChat(req: Request, res: Response): Promise<Response> {
         try {
             const userIds: string[] = req.body.userIds;
+            console.log(userIds)
             const chat = await this.chatService.createChat(userIds);
             return res.status(201).json(chat);
         } catch (error) {

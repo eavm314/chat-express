@@ -6,7 +6,6 @@ export class ChatService {
 
     async createChat(userIds: string[]): Promise<Chat> {
         // La lógica para crear un chat
-        console.log('aaa')
         return this.chatRepository.createChat(userIds);
     }
 

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from "typeorm";
 import { UserEntity } from "./UserEntity";
 import { MessageEntity } from "./MessageEntity";
 import { IChatEntity } from "../../domain/entities/IChatEntity";
@@ -9,6 +9,7 @@ export class ChatEntity implements IChatEntity{
     id!: string;
 
     @ManyToMany(() => UserEntity)
+    @JoinTable() 
     users!: UserEntity[];
 
     @OneToMany(() => MessageEntity, message => message.chat)

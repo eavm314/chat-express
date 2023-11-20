@@ -8,12 +8,10 @@ export class ChatRepository implements IChatRepository {
     private chatRepository = AppDataSource.getRepository(ChatEntity);
 
     async createChat(userIds: string[]): Promise<Chat> {
-        console.log('se murio 1')
-        console.log(userIds)
         const users = await AppDataSource.getRepository(UserEntity).findByIds(userIds);
-        console.log('se murio 2')
-        console.log(users)
         const newChat = this.chatRepository.create({ users });
+        console.log(newChat);
+
         const savedChat = await this.chatRepository.save(newChat);
         return new Chat(savedChat);
     }

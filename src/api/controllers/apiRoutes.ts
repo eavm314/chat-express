@@ -8,6 +8,9 @@ import { AuthController } from './AuthController';
 import { EncryptJwt } from '../../infrastructure/utils/EncryptJwt';
 import { RedisCacheService } from '../../infrastructure/cache/RedisCacheService';
 import { ChatService } from '../../app/services/ChatService';
+import { MessageRepository } from '../../infrastructure/repositories/MessageRepository';
+import { MessageService } from '../../app/services/MessageService';
+import { MessageController } from './MessageController';
 
 const encrypt = new EncryptJwt();
 
@@ -21,9 +24,9 @@ const authController = new AuthController(authService);
 const chatRepository = new ChatRepository();
 const chatService = new ChatService(chatRepository);
 const chatController = new ChatController(chatService);  
-const messageRepository = new ChatRepository();
-const messageService = new ChatService(messageRepository);
-const messageController = new ChatController(messageService);
+const messageRepository = new MessageRepository();
+const messageService = new MessageService(messageRepository);
+const messageController = new MessageController(messageService);
 
 const API:string = '/api';
 

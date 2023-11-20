@@ -11,6 +11,7 @@ export class MessageEntity implements IMessageEntity {
     @Column("text")
     content!: string;
 
+    // Relación ManyToOne con ChatEntity
     @ManyToOne(() => ChatEntity, chat => chat.messages)
     chat!: ChatEntity;
 
