@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 
 import { IUserRepository } from "../../domain/interfaces/IUserRepository";
 import { UserEntity } from "../entities/UserEntity";
-import { AppDataSource } from "../config/dataSource";
+import { AppDataSource } from "../db/dataSource";
 import { User } from "../../domain/models/User";
 import logger from "../logger/logger";
 

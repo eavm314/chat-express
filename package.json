@@ -1,7 +1,7 @@
 {
-  "name": "sql-app",
+  "name": "chat-express",
   "version": "1.0.0",
-  "description": "Backend para la gamificacion de la enseñanza SQL",
+  "description": "Backend para la creacion de un chat One-To-One",
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only src/index.ts",
@@ -29,6 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
+    "pg": "^8.11.3",
     "redis": "^4.6.10",
     "typeorm": "^0.3.17",
     "uuid": "^9.0.1",
