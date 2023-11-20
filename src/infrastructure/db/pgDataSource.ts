@@ -2,6 +2,8 @@ import "reflect-metadata";
 import { pg } from "../config/config";
 import { DataSource } from "typeorm";
 import { UserEntity } from "../entities/UserEntity";
+import { MessageEntity } from "../entities/MessageEntity";
+import { ChatEntity } from "../entities/ChatEntity";
 
 export const PGDataSource = new DataSource({
     type: "postgres",
@@ -12,7 +14,7 @@ export const PGDataSource = new DataSource({
     database: pg.name,
     synchronize: true,
     logging: false,
-    entities: [UserEntity],
+    entities: [UserEntity, MessageEntity, ChatEntity],
     subscribers: [],
     migrations: [],
     ssl: true

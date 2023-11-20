@@ -1,4 +1,4 @@
-import { AppDataSource } from "../config/dataSource";
+import { AppDataSource } from "../db/dataSource";
 import { ChatEntity } from "../entities/ChatEntity";
 import { UserEntity } from "../entities/UserEntity";
 import { IChatRepository } from "../../domain/interfaces/IChatRepository";
