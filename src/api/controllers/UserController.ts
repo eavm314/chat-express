@@ -3,6 +3,7 @@ import { UserService } from '../../app/services/UserService';
 import { UserResponseDto } from '../../app/dtos/UserResponseDto';
 import { CreateUserDto } from '../../app/dtos/CreateUserDto';
 import logger from '../../infrastructure/logger/logger';
+import { verifyToken } from '../middleware/verifyToken';
 
 export class UserController {
     public router: Router;
@@ -14,12 +15,12 @@ export class UserController {
         this.routes();
     }
 
-    public async getUserById(req: Request, res: Response): Promise<void> {
-        logger.info("Obteniendo User por Id");
+    public async getUser(req: Request, res: Response): Promise<void> {
+        logger.info("Obteniendo User");
         
-        const { id } = req.params;
+        const id = req.user_id;
 
-        logger.debug(`controller, getUserById(${id})`);
+        logger.debug(`controller, getUser(${id})`);
 
         const userDto = await this.userService.getUserById(id);
 
@@ -51,7 +52,7 @@ export class UserController {
     }
 
     public async deleteUser(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
+        const id = req.user_id;
         try {
             logger.debug(`Intentando eliminar al usuario con ID: ${id}`);
             await this.userService.deleteUser(id);
@@ -64,7 +65,7 @@ export class UserController {
     }
 
     public async updateUser(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
+        const id = req.user_id;
         const updateData = req.body;
         try {
             logger.debug(`Intentando actualizar al usuario con ID: ${id}`);
@@ -78,9 +79,10 @@ export class UserController {
     };
 
     public routes() {
-        this.router.get('/:id', this.getUserById.bind(this));
+        // this.router.get('/:id', this.getUserById.bind(this));
+        this.router.get('/', verifyToken, this.getUser.bind(this));
         this.router.post('/', this.createUser.bind(this));
-        this.router.delete('/:id', this.deleteUser.bind(this));
-        this.router.put('/:id', this.updateUser.bind(this));
+        this.router.delete('/', verifyToken, this.deleteUser.bind(this));
+        this.router.put('/', verifyToken, this.updateUser.bind(this));
     }
 }

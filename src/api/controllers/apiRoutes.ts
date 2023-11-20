@@ -31,7 +31,7 @@ const messageController = new MessageController(messageService);
 const API:string = '/api';
 
 export const routes = (server: any) => {
-    server.use(`${API}/users`, userController.router);
+    server.use(`${API}/user`, userController.router);
     server.use(`${API}/auth`, authController.router);
     server.use(`${API}/message`, messageController.router);
     server.use(`${API}/chat`, chatController.router);

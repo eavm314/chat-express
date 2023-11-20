@@ -1,4 +1,4 @@
-import { AppDataSource } from "../config/dataSource";
+import { AppDataSource } from "../db/dataSource";
 import { MessageEntity } from "../entities/MessageEntity";
 import { IMessageRepository } from "../../domain/interfaces/IMessageRepository";
 import { Message } from "../../domain/models/Message";
