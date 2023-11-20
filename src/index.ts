@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import morgan from "morgan";
 
 import logger from "./infrastructure/logger/logger";
-import { AppDataSource } from "./infrastructure/config/dataSource";
+import { AppDataSource } from "./infrastructure/db/dataSource";
 import { env } from './infrastructure/config/config';
 import { routes } from './api/controllers/apiRoutes';
 
@@ -28,4 +28,4 @@ AppDataSource.initialize().then(() => {
     app.listen(PORT, () => {
         console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
     });
-}).catch(error => console.log(error));
+}).catch(error => logger.error(`Error al conectar la Base de Datos: ${JSON.stringify(error)}`));

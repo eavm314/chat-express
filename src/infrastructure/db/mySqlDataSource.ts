@@ -1,17 +1,17 @@
 import "reflect-metadata";
-import { db } from "./config";
+import { mysql } from "../config/config";
 import { DataSource } from "typeorm";
 import { UserEntity } from "../entities/UserEntity";
 import { MessageEntity } from "../entities/MessageEntity";
 import { ChatEntity } from "../entities/ChatEntity";
 
-export const AppDataSource = new DataSource({
+export const MySqlDatasource = new DataSource({
     type: "mysql",
-    host: db.host,
-    port: db.port,
-    username: db.user,
-    password: db.password,
-    database: db.name,
+    host: mysql.host,
+    port: mysql.port,
+    username: mysql.user,
+    password: mysql.password,
+    database: mysql.name,
     synchronize: true,
     logging: false,
     entities: [UserEntity, MessageEntity, ChatEntity],
