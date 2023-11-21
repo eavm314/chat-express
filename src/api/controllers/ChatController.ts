@@ -2,23 +2,26 @@ import { Request, Response, Router } from 'express';
 import { ChatService } from '../../app/services/ChatService';
 import logger from '../../infrastructure/logger/logger';
 import { CreateChatDto } from '../../app/dtos/CreateChatDto';
-import { verifyToken } from '../middleware/verifyToken';
+import { verifyChatParticipant } from '../middleware/verifyChatParticipant';
+
 
 export class ChatController {
     public router: Router;
     private chatService: ChatService;
+    private chatParticipantMiddleware;
 
     constructor(chatService: ChatService) {
         this.chatService = chatService;
         this.router = Router();
+        this.chatParticipantMiddleware = verifyChatParticipant(chatService);
         this.routes();
     }
 
     public async createChat(req: Request, res: Response): Promise<Response> {
         try {
-            const body: CreateChatDto = req.body.recieverId;
-            const userIds: string[] = [req.user_id, body.recieverId];
-            logger.debug(userIds);
+            const createChatDTO: CreateChatDto = req.body;
+            const userIds: string[] = [req.user_id, createChatDTO.recieverId];
+            logger.debug('Ids de Usuarios: ',userIds);
             const chat = await this.chatService.createChat(userIds);
             return res.status(201).json(chat);
         } catch (error) {
@@ -64,9 +67,9 @@ export class ChatController {
     }
 
     public routes() {
-        this.router.post('/', verifyToken, this.createChat.bind(this));
-        this.router.get('/user', verifyToken, this.getChatsByUser.bind(this));
-        this.router.get('/:chatId', verifyToken, this.getChatById.bind(this));
-        this.router.delete('/:chatId', verifyToken, this.deleteChat.bind(this));
+        this.router.post('/', this.createChat.bind(this));
+        this.router.get('/user', this.getChatsByUser.bind(this));
+        this.router.get('/:chatId', this.chatParticipantMiddleware,this.getChatById.bind(this));
+        this.router.delete('/:chatId', this.chatParticipantMiddleware, this.deleteChat.bind(this));
     }
 }

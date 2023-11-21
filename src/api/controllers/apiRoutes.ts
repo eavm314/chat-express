@@ -11,6 +11,8 @@ import { ChatService } from '../../app/services/ChatService';
 import { MessageRepository } from '../../infrastructure/repositories/MessageRepository';
 import { MessageService } from '../../app/services/MessageService';
 import { MessageController } from './MessageController';
+import { verifyChatParticipant } from '../middleware/verifyChatParticipant';
+import { verifyToken } from '../middleware/verifyToken';
 
 export const encrypt = new EncryptJwt();
 
@@ -23,16 +25,20 @@ const authService = new AuthService(userRepository, redisService);
 const authController = new AuthController(authService);
 const chatRepository = new ChatRepository();
 const chatService = new ChatService(chatRepository);
-const chatController = new ChatController(chatService);  
+
+
+const chatController = new ChatController(chatService);
 const messageRepository = new MessageRepository();
 const messageService = new MessageService(messageRepository);
-const messageController = new MessageController(messageService);
+const messageController = new MessageController(messageService, chatService);
 
-const API:string = '/api';
+
+
+const API: string = '/api';
 
 export const routes = (server: any) => {
-    server.use(`${API}/user`, userController.router);
+    server.use(`${API}/user`, verifyToken, userController.router);
     server.use(`${API}/auth`, authController.router);
-    server.use(`${API}/message`, messageController.router);
-    server.use(`${API}/chat`, chatController.router);
+    server.use(`${API}/message`, verifyToken, messageController.router);
+    server.use(`${API}/chat`, verifyToken, chatController.router);
 };

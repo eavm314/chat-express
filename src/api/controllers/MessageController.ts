@@ -1,16 +1,20 @@
 import { Request, Response, Router } from 'express';
 import { MessageService } from '../../app/services/MessageService';
 import logger from '../../infrastructure/logger/logger';
-import { verifyToken } from '../middleware/verifyToken';
 import { SendMessageDto } from '../../app/dtos/SendMessageDto';
+import { verifyChatParticipant } from '../middleware/verifyChatParticipant';
+import { ChatService } from '../../app/services/ChatService';
 
 export class MessageController {
     public router: Router;
     private messageService: MessageService;
+    private chatParticipantMiddleware;
 
-    constructor(messageService: MessageService) {
+
+    constructor(messageService: MessageService, chatService: ChatService) {
         this.messageService = messageService;
         this.router = Router();
+        this.chatParticipantMiddleware = verifyChatParticipant(chatService);
         this.routes();
     }
 
@@ -41,7 +45,7 @@ export class MessageController {
     }
 
     public routes() {
-        this.router.post('/:chatId', verifyToken, this.createMessage.bind(this));
-        this.router.get('/:chatId', verifyToken, this.getMessagesByChat.bind(this));
+        this.router.post('/:chatId', this.chatParticipantMiddleware, this.createMessage.bind(this));
+        this.router.get('/:chatId',  this.chatParticipantMiddleware, this.getMessagesByChat.bind(this));
     }
 }

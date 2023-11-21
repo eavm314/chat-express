@@ -2,6 +2,7 @@ import { IChatRepository } from "../../domain/interfaces/IChatRepository";
 import { Chat } from "../../domain/models/Chat";
 
 export class ChatService {
+    
     constructor(private chatRepository: IChatRepository) {}
 
     async createChat(userIds: string[]): Promise<Chat> {
@@ -22,5 +23,10 @@ export class ChatService {
     async deleteChat(chatId: string): Promise<void> {
         // La lógica para eliminar un chat
         await this.chatRepository.deleteChat(chatId);
+    }
+
+    async isUserInChat(userId: string, chatId: string): Promise<boolean> {
+        const chat = await this.chatRepository.findChatById(chatId);
+        return chat?.users.some(user => user.id === userId) ?? false;
     }
 }
