@@ -8,8 +8,16 @@ export class EncryptJwt implements IEncrypt {
         const token = jwt.sign(data, jwtConfig.secretKey, { expiresIn: jwtConfig.expirationTime });
         return token;
     }
-    decrypt(text: string): string {
-        throw new Error("Method not implemented.");
+    decrypt(token: string): any {
+        let returnedValue;
+        jwt.verify(token, jwtConfig.secretKey, (err, data: any) => {
+            if (err) {
+                throw new Error(err.message);
+            }
+            returnedValue = data;
+        });
+
+        return returnedValue;
     }
     
 }

@@ -12,14 +12,14 @@ import { MessageRepository } from '../../infrastructure/repositories/MessageRepo
 import { MessageService } from '../../app/services/MessageService';
 import { MessageController } from './MessageController';
 
-const encrypt = new EncryptJwt();
+export const encrypt = new EncryptJwt();
 
-const redisService = new RedisCacheService();
+export const redisService = new RedisCacheService();
 
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository, redisService);
 const userController = new UserController(userService);
-const authService = new AuthService(userRepository, encrypt, redisService);
+const authService = new AuthService(userRepository, redisService);
 const authController = new AuthController(authService);
 const chatRepository = new ChatRepository();
 const chatService = new ChatService(chatRepository);

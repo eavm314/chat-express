@@ -8,12 +8,12 @@ import { UserResponseDto } from "../dtos/UserResponseDto";
 import { IUserRepository } from "../../domain/interfaces/IUserRepository";
 import { IEncrypt } from "../utils/IEncrypt";
 import { ICacheService } from "../../domain/interfaces/ICacheService";
+import { encrypt } from "../../api/controllers/apiRoutes";
 
 export class AuthService {
 
     constructor(
         private userRepository: IUserRepository, 
-        private encrypt: IEncrypt,
         private cacheService: ICacheService
     ) { }
 
@@ -23,24 +23,19 @@ export class AuthService {
     }
 
     async login(loginDTO: LoginDto): Promise<UserResponseDto> {
-        // this.getCache();
-
         const userEntity: Partial<IUserEntity> = {
             email: loginDTO.email,
             passwordHash: loginDTO.password
         };
-        console.log('vive aca')
+        
         const user: User = await this.userRepository.findByEmail(userEntity.email);
 
         if (!user) {
             logger.error(`El usuario con el email: ${userEntity.email} no existe`);
-            throw Error('El email o el password son incorrectos');
+            throw Error('El email proporcionado no existe');
         }
 
-        
-
         this.cacheService.set(`USER:${user.id}`, JSON.stringify(user));
-        // TODO: llevarlo al utils 
 
         const isPasswordCorrect = await bcrypt.compare(userEntity.passwordHash, user.passwordHash);
         if (!isPasswordCorrect) {
@@ -48,18 +43,13 @@ export class AuthService {
             throw Error('El email o el password son incorrectos');
         }
 
-        const token = this.encrypt.encrypt({ userId: user.id });
+        const token = encrypt.encrypt({ userId: user.id });
         user.token = token;
-        // user.lastLogin = new Date();
-
-        const userUpdated = await this.userRepository.updateUser(user.id, user);
 
         return {
-            id: userUpdated.id,
-            username: userUpdated.username,
-            email: userUpdated.email,
-            // lastLogin: userUpdated.lastLogin,
-            // roleId: userUpdated.role.id,
+            id: user.id,
+            username: user.username,
+            email: user.email,
             token: user.token
         };
     }

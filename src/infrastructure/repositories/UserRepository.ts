@@ -73,11 +73,6 @@ export class UserRepository implements IUserRepository {
             throw new Error('Usuario no encontrado');
         }
 
-        // if (user.role.id !== updateData.roleId)
-        // get role a partir del updateData.roleId
-        // if (!role) 
-        // user.role = role
-
         repository.merge(user, updateData);
         const updatedUser = await repository.save(user);
         return new User(updatedUser);
