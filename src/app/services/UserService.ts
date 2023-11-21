@@ -20,7 +20,6 @@ export class UserService {
 
         if (userCache){
             const userResponse = JSON.parse(userCache) as UserResponseDto;
-            logger.info(`UserCache recuperado: ${userResponse.email}`);
             return userResponse;
         }
 
@@ -61,12 +60,15 @@ export class UserService {
     }
 
     async deleteUser(userId: string): Promise<void> {
+        logger.info("service, deleteUser");
         logger.debug(`UserService: Intentando eliminar al usuario con ID: ${userId}`);
         await this.userRepository.deleteUser(userId);
     }
 
     async updateUser(userId: string, updateData: Partial<CreateUserDto>): Promise<User> {
+        logger.info("service, updateUser");
         logger.debug(`UserService: Intentando actualizar al usuario con ID: ${userId}`);
+        this.cacheService.remove(`USER:${userId}`);
         return this.userRepository.updateUser(userId, updateData);
     }
 }

@@ -29,7 +29,7 @@ const chatService = new ChatService(chatRepository);
 
 const chatController = new ChatController(chatService);
 const messageRepository = new MessageRepository();
-const messageService = new MessageService(messageRepository);
+const messageService = new MessageService(messageRepository, redisService);
 const messageController = new MessageController(messageService, chatService);
 
 
@@ -37,7 +37,7 @@ const messageController = new MessageController(messageService, chatService);
 const API: string = '/api';
 
 export const routes = (server: any) => {
-    server.use(`${API}/user`, verifyToken, userController.router);
+    server.use(`${API}/user`, userController.router);
     server.use(`${API}/auth`, authController.router);
     server.use(`${API}/message`, verifyToken, messageController.router);
     server.use(`${API}/chat`, verifyToken, chatController.router);

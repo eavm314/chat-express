@@ -23,6 +23,8 @@ export class AuthService {
     }
 
     async login(loginDTO: LoginDto): Promise<UserResponseDto> {
+        logger.info("service, login");
+        logger.debug(`service, login(${Object.entries(loginDTO)})`);
         const userEntity: Partial<IUserEntity> = {
             email: loginDTO.email,
             passwordHash: loginDTO.password
