@@ -42,12 +42,10 @@ export class UserController {
             return res.status(201).json({ message: "User created successfully", user });
 
         } catch (error: any) {
-            logger.error("Error al procesar la solicitud", {
-                operation: 'createUser',
-                errorMessage: error.message,
-                errorStack: error.stack,
-            });
-            return res.status(400).json({ message: error });
+            logger.error(`Error al procesar la solicitud, ${JSON.stringify(error)}`);
+            if (error instanceof Error)
+                return res.status(400).json({ message: error.message });
+            res.status(500).json({ message: 'Internal server error' });
         }
     }
 
@@ -59,8 +57,10 @@ export class UserController {
             logger.info(`Usuario con ID: ${id} eliminado con éxito`);
             return res.status(200).json({ message: 'Usuario eliminado con éxito' });
         } catch (error) {
-            logger.error(`Error al eliminar al usuario con ID: ${id}. Error: ${error}`);
-            return res.status(500).json({ message: error });
+            logger.error(`Error al eliminar al usuario, ${JSON.stringify(error)}`);
+            if (error instanceof Error)
+                return res.status(400).json({ message: error.message });
+            res.status(500).json({ message: 'Internal server error' });
         }
     }
 
@@ -73,8 +73,10 @@ export class UserController {
             logger.info(`Usuario con ID: ${id} actualizado con éxito`);
             return res.status(200).json({ user: updatedUser });
         } catch (error) {
-            logger.error(`Error al actualizar al usuario con ID: ${id}. Error: ${error}`);
-            return res.status(500).json({ message: 'Error al actualizar el usuario' });
+            logger.error(`Error al actualizar al usuario, ${JSON.stringify(error)}`);
+            if (error instanceof Error)
+                return res.status(400).json({ message: error.message });
+            res.status(500).json({ message: 'Internal server error' });
         }
     };
 
